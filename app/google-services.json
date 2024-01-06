@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "453991395839",
+    "project_id": "studio-m-765bb",
+    "storage_bucket": "studio-m-765bb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:453991395839:android:d47c613a08fc67598837ca",
+        "android_client_info": {
+          "package_name": "benicio.solucoes.studiom"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOsESxwRBnA9pE1FbOKfmXZ0jxQ24cxf4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

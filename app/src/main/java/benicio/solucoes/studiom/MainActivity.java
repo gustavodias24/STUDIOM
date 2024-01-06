@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.WindowManager;
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding mainBinding;
     private static final int SPLASH_DURATION = 3000;
 
+    private SharedPreferences preferences;
     @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,15 +41,22 @@ public class MainActivity extends AppCompatActivity {
         fadeIn.setDuration(1500); // 1,5 segundos
         mainBinding.logo.startAnimation(fadeIn);
 
+        preferences = getSharedPreferences("usuario_prefs", MODE_PRIVATE);
+
         // Inicia a próxima atividade após 3 segundos
         new Handler().postDelayed(() -> {
             Intent intent;
-            if ( true ) {
+            if ( !preferences.getBoolean("online", false) ) {
                 intent = new Intent(getApplicationContext(), LoginActivity.class);
+            }else{
+                if( preferences.getBoolean("admin", false)){
+                    intent = new Intent(this, MenuAdminActivity.class);
+                }else{
+                    // TO DO AGENDAMENTOS
+                    intent = new Intent(this, LoginActivity.class);
+                }
             }
-//            }else{
-//                intent = new Intent(getApplicationContext(), TarefasActivity.class);
-//            }
+
             startActivity(intent);
             finish();
         }, SPLASH_DURATION);
