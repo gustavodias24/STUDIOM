@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="cliente selecionado: " />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Selecionar cliente"
+        android:textAllCaps="true"
+        android:textColor="#FFFFFF" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Data" />
+
+    <com.vicmikhailau.maskededittext.MaskedEditText
+        android:id="@+id/dataAgendamento"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="11-08-2002"
+        android:inputType="number|numberDecimal|numberSigned"
+        app:mask="##-##-##" />
+
+    <TextView
+        android:id="@+id/textViewhora"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hora" />
+
+    <com.vicmikhailau.maskededittext.MaskedEditText
+        android:id="@+id/horaAgendamento"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="04:20"
+        android:inputType="number|numberDecimal|numberSigned"
+        app:mask="##:##" />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radioAM"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="AM" />
+
+        <RadioButton
+            android:id="@+id/radioPM"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="PM" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Escolha o Pacote" />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radio12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="12 Sessões / 260 Reais" />
+
+        <RadioButton
+            android:id="@+id/radio8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="8 Sessões / 210 Reais" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Cadastrar"
+        android:textAllCaps="true"
+        android:textColor="#FFFFFF" />
+
+</LinearLayout>

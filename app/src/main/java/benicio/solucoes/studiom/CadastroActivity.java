@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import benicio.solucoes.studiom.databinding.ActivityCadastroBinding;
+import benicio.solucoes.studiom.databinding.LayoutCadastroAgendamentoBinding;
 import benicio.solucoes.studiom.databinding.LayoutCadastroClienteBinding;
 import benicio.solucoes.studiom.databinding.LayoutCadastroFuncionarioBinding;
 
@@ -41,6 +42,8 @@ public class CadastroActivity extends AppCompatActivity {
             case 2:
                 configurarDialogCadastroFuncionario();
                 break;
+            default:
+                configurarDialogCadastroAgendamento();
 
         }
 
@@ -62,6 +65,14 @@ public class CadastroActivity extends AppCompatActivity {
         b.setTitle("Cadastro de Funcionário");
         LayoutCadastroFuncionarioBinding cadastroFuncionarioBinding = LayoutCadastroFuncionarioBinding.inflate(getLayoutInflater());
         b.setView(cadastroFuncionarioBinding.getRoot());
+        dialogCadastro = b.create();
+    }
+
+    private void configurarDialogCadastroAgendamento(){
+        AlertDialog.Builder b = new AlertDialog.Builder(this);
+        b.setTitle("Cadastro de Agendamento");
+        LayoutCadastroAgendamentoBinding cadastroAgendamentoBinding = LayoutCadastroAgendamentoBinding.inflate(getLayoutInflater());
+        b.setView(cadastroAgendamentoBinding.getRoot());
         dialogCadastro = b.create();
     }
 
