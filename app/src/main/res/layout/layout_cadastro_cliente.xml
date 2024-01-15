@@ -13,7 +13,7 @@
         android:text="Nome do Cliente" />
 
     <EditText
-        android:id="@+id/editTextText"
+        android:id="@+id/nomeClienteField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -27,6 +27,7 @@
         android:text="Número de WhatsApp" />
 
     <com.vicmikhailau.maskededittext.MaskedEditText
+        android:id="@+id/whatsappField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="551100000000"

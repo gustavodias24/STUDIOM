@@ -6,19 +6,7 @@
     android:orientation="vertical"
     android:padding="8dp">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Nome do Funcionário" />
 
-    <EditText
-        android:id="@+id/nomeFunc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Fulano de Tal"
-        android:inputType="text" />
 
     <TextView
         android:id="@+id/textView3"
@@ -47,6 +35,21 @@
         android:ems="10"
         android:hint="Senha"
         android:inputType="text" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nome do Funcionário" />
+
+    <EditText
+        android:id="@+id/nomeFunc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Fulano de Tal"
+        android:inputType="text" />
+
 
     <TextView
         android:id="@+id/textView"
