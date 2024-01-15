@@ -31,20 +31,25 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import benicio.solucoes.studiom.adapter.AdapterCliente;
 import benicio.solucoes.studiom.adapter.AdapterGeneric;
 import benicio.solucoes.studiom.databinding.ActivityCadastroBinding;
 import benicio.solucoes.studiom.databinding.LayoutCadastroAgendamentoBinding;
 import benicio.solucoes.studiom.databinding.LayoutCadastroClienteBinding;
 import benicio.solucoes.studiom.databinding.LayoutCadastroFuncionarioBinding;
 import benicio.solucoes.studiom.databinding.LoadingScreenBinding;
+import benicio.solucoes.studiom.models.ClienteModel;
 import benicio.solucoes.studiom.models.UserModel;
 
 public class CadastroActivity extends AppCompatActivity {
     private List<UserModel> funcionarios = new ArrayList<>();
+    private List<ClienteModel> clientes = new ArrayList<>();
     private RecyclerView recyclerCadastro;
     private AdapterGeneric adapterGeneric;
+    private AdapterCliente adapterCliente;
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private DatabaseReference refUser = FirebaseDatabase.getInstance().getReference().child("users");
+    private DatabaseReference refClientes = FirebaseDatabase.getInstance().getReference().child("clientes");
     private ActivityCadastroBinding mainBinding;
     private Bundle bundle;
     private Dialog dialogCadastro, dialogCarregando;
@@ -61,33 +66,33 @@ public class CadastroActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        bundle = getIntent().getExtras();
-        t = bundle.getInt("t", 1);
-
-        switch (t){
-            case 1:
-                configurarDialogCadastroCliente();
-                break;
-            case 2:
-                configurarDialogCadastroFuncionario();
-                break;
-            default:
-                configurarDialogCadastroAgendamento();
-
-        }
+        configurarDialogCarregando();
 
         recyclerCadastro = mainBinding.recyclerCadastro;
         recyclerCadastro.setLayoutManager(new LinearLayoutManager(this));
         recyclerCadastro.setHasFixedSize(true);
         recyclerCadastro.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
-        mainBinding.fabCadastro.setOnClickListener(view -> dialogCadastro.show());
-        configurarDialogCarregando();
+        bundle = getIntent().getExtras();
+        t = bundle.getInt("t", 1);
 
-        if ( t == 2){
-            configurarRecyclerFuncionario();
-            configurarListenerUsuario();
+        switch (t){
+            case 1:
+                configurarDialogCadastroCliente();
+                configurarRecyclerCliente();
+                configurarListenerCliente();
+                break;
+            case 2:
+                configurarDialogCadastroFuncionario();
+                configurarRecyclerFuncionario();
+                configurarListenerUsuario();
+                break;
+            default:
+                configurarDialogCadastroAgendamento();
+
         }
+
+        mainBinding.fabCadastro.setOnClickListener(view -> dialogCadastro.show());
 
     }
 
@@ -95,8 +100,64 @@ public class CadastroActivity extends AppCompatActivity {
         AlertDialog.Builder b = new AlertDialog.Builder(this);
         b.setTitle("Cadastro de cliente");
         LayoutCadastroClienteBinding cadastroClienteBinding = LayoutCadastroClienteBinding.inflate(getLayoutInflater());
+
+        cadastroClienteBinding.button.setOnClickListener( view -> {
+            dialogCarregando.show();
+            String nome, numero;
+            String linkZap;
+
+            nome = cadastroClienteBinding.nomeClienteField.getText().toString();
+            numero = cadastroClienteBinding.whatsappField.getText().toString();
+            linkZap = "https://wa.me/"  + numero;
+            String id = UUID.randomUUID().toString();
+
+            ClienteModel novoCliente = new ClienteModel(
+                    id, nome, numero, linkZap
+            );
+
+            refClientes.child(id).setValue(novoCliente).addOnCompleteListener(task -> {
+                dialogCarregando.dismiss();
+                if ( task.isSuccessful() ){
+                    cadastroClienteBinding.nomeClienteField.setText("");
+                    cadastroClienteBinding.whatsappField.setText("");
+                    dialogCadastro.dismiss();
+                    CuteToast.ct(this, "Cadastrado com Sucesso!", Toast.LENGTH_LONG, CuteToast.SUCCESS, true).show();
+                }
+            });
+        });
+
         b.setView(cadastroClienteBinding.getRoot());
         dialogCadastro = b.create();
+    }
+
+    private void configurarRecyclerCliente(){
+        adapterCliente = new AdapterCliente(clientes,this, dialogCarregando);
+        recyclerCadastro.setAdapter(adapterCliente);
+    }
+
+    private void configurarListenerCliente(){
+        dialogCarregando.show();
+
+        refClientes.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                clientes.clear();
+                dialogCarregando.dismiss();
+                if ( snapshot.exists() ){
+                    for ( DataSnapshot dado : snapshot.getChildren() ){
+                        ClienteModel cliente = dado.getValue(ClienteModel.class);
+                        clientes.add(cliente);
+                    }
+                    adapterCliente.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                dialogCarregando.dismiss();
+            }
+        });
     }
     private void configurarDialogCadastroFuncionario(){
         AlertDialog.Builder b = new AlertDialog.Builder(this);

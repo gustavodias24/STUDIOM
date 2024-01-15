@@ -1,5 +1,6 @@
 package benicio.solucoes.studiom.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.view.LayoutInflater;
@@ -24,7 +25,6 @@ public class AdapterGeneric extends RecyclerView.Adapter<AdapterGeneric.MyViewHo
     private DatabaseReference refUser = FirebaseDatabase.getInstance().getReference().child("users");
     List<UserModel> funcionarios;
     Activity a;
-
     Dialog dialogCarregando;
 
     public AdapterGeneric(List<UserModel> funcionarios, Activity a, Dialog dialogCarregando) {
@@ -39,6 +39,7 @@ public class AdapterGeneric extends RecyclerView.Adapter<AdapterGeneric.MyViewHo
         return new MyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_generic, parent, false));
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         UserModel funcionario = funcionarios.get(position);
@@ -49,8 +50,11 @@ public class AdapterGeneric extends RecyclerView.Adapter<AdapterGeneric.MyViewHo
 
         holder.removerButton.setOnClickListener(view -> {
             dialogCarregando.show();
-
-            refUser.child(funcionario.getId()).setValue(null).addOnCompleteListener( task -> dialogCarregando.dismiss());
+            funcionarios.remove(position);
+            this.notifyDataSetChanged();
+            refUser.child(funcionario.getId()).setValue(null).addOnCompleteListener( task -> {
+                dialogCarregando.dismiss();
+            });
         });
     }
 
