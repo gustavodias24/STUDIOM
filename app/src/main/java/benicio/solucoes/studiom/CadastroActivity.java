@@ -12,6 +12,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -37,7 +38,9 @@ import benicio.solucoes.studiom.databinding.ActivityCadastroBinding;
 import benicio.solucoes.studiom.databinding.LayoutCadastroAgendamentoBinding;
 import benicio.solucoes.studiom.databinding.LayoutCadastroClienteBinding;
 import benicio.solucoes.studiom.databinding.LayoutCadastroFuncionarioBinding;
+import benicio.solucoes.studiom.databinding.LayoutExibirClientesBinding;
 import benicio.solucoes.studiom.databinding.LoadingScreenBinding;
+import benicio.solucoes.studiom.models.AgendamentoModel;
 import benicio.solucoes.studiom.models.ClienteModel;
 import benicio.solucoes.studiom.models.UserModel;
 
@@ -50,6 +53,7 @@ public class CadastroActivity extends AppCompatActivity {
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private DatabaseReference refUser = FirebaseDatabase.getInstance().getReference().child("users");
     private DatabaseReference refClientes = FirebaseDatabase.getInstance().getReference().child("clientes");
+    private DatabaseReference refAgendamentos = FirebaseDatabase.getInstance().getReference().child("agendamentos");
     private ActivityCadastroBinding mainBinding;
     private Bundle bundle;
     private Dialog dialogCadastro, dialogCarregando;
@@ -265,6 +269,103 @@ public class CadastroActivity extends AppCompatActivity {
         AlertDialog.Builder b = new AlertDialog.Builder(this);
         b.setTitle("Cadastro de Agendamento");
         LayoutCadastroAgendamentoBinding cadastroAgendamentoBinding = LayoutCadastroAgendamentoBinding.inflate(getLayoutInflater());
+
+        cadastroAgendamentoBinding.selecionarCliente.setOnClickListener(view -> {
+            dialogCarregando.show();
+            refClientes.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                    dialogCarregando.dismiss();
+                    if ( snapshot.exists() ){
+                        Dialog dialogSelecao;
+                        AlertDialog.Builder builderSelecao = new AlertDialog.Builder(CadastroActivity.this);
+                        builderSelecao.setTitle("Selecione um Cliente");
+                        LayoutExibirClientesBinding exibirClientesBinding = LayoutExibirClientesBinding.inflate(getLayoutInflater());
+                        RecyclerView recyclerExibicao = exibirClientesBinding.recyclerExibirCliente;
+
+                        recyclerExibicao.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                        recyclerExibicao.setHasFixedSize(true);
+                        recyclerExibicao.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL));
+
+                        List<ClienteModel> listaExibicao = new ArrayList<>();
+                        for ( DataSnapshot dado : snapshot.getChildren()){
+                            listaExibicao.add(dado.getValue(ClienteModel.class));
+                        }
+
+                        builderSelecao.setView(exibirClientesBinding.getRoot());
+                        dialogSelecao = builderSelecao.create();
+
+                        AdapterCliente adapterExibicao = new AdapterCliente(listaExibicao,
+                                CadastroActivity.this,
+                                dialogCarregando,
+                                true,
+                                dialogSelecao, cadastroAgendamentoBinding);
+                        recyclerExibicao.setAdapter(adapterExibicao);
+
+
+                        dialogSelecao.show();
+                    }else{
+                        CuteToast.ct(getApplicationContext(), "Nenhum Cliente Encontrado", CuteToast.LENGTH_LONG, CuteToast.WARN, true).show();
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    dialogCarregando.dismiss();
+                }
+            });
+        });
+
+        cadastroAgendamentoBinding.cadastrarAgendamento.setOnClickListener( view -> {
+            String data, hora, pacote;
+
+            data = cadastroAgendamentoBinding.dataAgendamento.getText().toString();
+            String pmORam = cadastroAgendamentoBinding.radioAM.isChecked() ? "AM" : "PM";
+            hora = cadastroAgendamentoBinding.horaAgendamento.getText().toString() + " " + pmORam ;
+            pacote = cadastroAgendamentoBinding.radio12.isChecked() ? "12 Sessões / 260 Reais" : "8 Sessões / 210 Reais";
+
+            int maxAula = cadastroAgendamentoBinding.radio12.isChecked() ? 12 : 8;
+
+            int status = 0; // pendente
+            int aula = 1;
+
+            String[] infoCliente = cadastroAgendamentoBinding.textClienteSelecionado.getText().toString().split("\n");
+            String idCliente = "", nomeCliente = "";
+
+            if ( infoCliente.length == 3 ){
+                idCliente = infoCliente[2];
+                nomeCliente = infoCliente[1];
+
+            }
+            while(aula <= maxAula){
+                String id = UUID.randomUUID().toString();
+                AgendamentoModel agendamentoModel = new AgendamentoModel(
+                        idCliente,
+                        nomeCliente,
+                        data,
+                        hora,
+                        pacote,
+                        id,
+                        status,
+                        aula
+                );
+
+                refAgendamentos.child(id).setValue(agendamentoModel);
+
+                data = "";
+                aula++;
+            }
+
+            CuteToast.ct(this, "Agendamento Realizado", CuteToast.LENGTH_LONG, CuteToast.SUCCESS, true).show();
+            dialogCadastro.dismiss();
+            cadastroAgendamentoBinding.dataAgendamento.setText("");
+            cadastroAgendamentoBinding.horaAgendamento.setText("");
+            cadastroAgendamentoBinding.textClienteSelecionado.setText("Cliente Selecionado: ");
+
+        });
+
         b.setView(cadastroAgendamentoBinding.getRoot());
         dialogCadastro = b.create();
     }

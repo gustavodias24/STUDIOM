@@ -1,14 +1,15 @@
 login de administrador
-
 cadastro de funcionario
 nome, email, senha, comissão em %
+cadastro de cliente
+nome, número de whatsapp
+
 
 cadastro de agendamento ( individualmente, des do inicio )
 data e hora, valor, status ( concluido, pendente, remarcado )
 
-cadastro de cliente
-nome, número de whatsapp
 
-filtro de pedidos por data, mostrar a comissão
 
-botão de avisar no zap
+filtro de pedidos por data, mostrar a comissão para cada funcionario
+
+botão de avisar no zap pra cada sessão

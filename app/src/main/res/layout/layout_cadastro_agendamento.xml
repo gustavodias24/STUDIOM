@@ -7,13 +7,14 @@
     android:padding="8dp">
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textClienteSelecionado"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="cliente selecionado: " />
+        android:text="Cliente Selecionado: "
+        android:textSize="16sp" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/selecionarCliente"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Selecionar cliente"
@@ -30,9 +31,9 @@
         android:id="@+id/dataAgendamento"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="11-08-2002"
+        android:hint="dd-MM-yyyy"
         android:inputType="number|numberDecimal|numberSigned"
-        app:mask="##-##-##" />
+        app:mask="##-##-####" />
 
     <TextView
         android:id="@+id/textViewhora"
@@ -44,7 +45,7 @@
         android:id="@+id/horaAgendamento"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="04:20"
+        android:hint="hh:mm"
         android:inputType="number|numberDecimal|numberSigned"
         app:mask="##:##" />
 
@@ -58,6 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:checked="true"
             android:text="AM" />
 
         <RadioButton
@@ -84,6 +86,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:checked="true"
             android:text="12 Sessões / 260 Reais" />
 
         <RadioButton
@@ -95,7 +98,7 @@
     </RadioGroup>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/cadastrarAgendamento"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"

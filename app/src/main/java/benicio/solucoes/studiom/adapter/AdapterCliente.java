@@ -20,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.List;
 
 import benicio.solucoes.studiom.R;
+import benicio.solucoes.studiom.databinding.LayoutCadastroAgendamentoBinding;
 import benicio.solucoes.studiom.models.ClienteModel;
 import benicio.solucoes.studiom.models.UserModel;
 
@@ -30,10 +31,31 @@ public class AdapterCliente extends RecyclerView.Adapter<AdapterCliente.MyViewHo
     Activity a;
     Dialog dialogCarregando;
 
+    boolean exibicao = false;
+    Dialog dialogSelecao;
+
+    LayoutCadastroAgendamentoBinding cadastroAgendamentoBinding;
+
     public AdapterCliente(List<ClienteModel> clientes, Activity a, Dialog dialogCarregando) {
         this.clientes = clientes;
         this.a = a;
         this.dialogCarregando = dialogCarregando;
+    }
+
+    public AdapterCliente(List<ClienteModel> clientes,
+                          Activity a,
+                          Dialog dialogCarregando,
+                          boolean exibicao,
+                          Dialog dialogSelecao,
+                          LayoutCadastroAgendamentoBinding cadastroAgendamentoBinding
+                          ) {
+        this.clientes = clientes;
+        this.a = a;
+        this.dialogCarregando = dialogCarregando;
+        this.exibicao = exibicao;
+        this.dialogSelecao = dialogSelecao;
+        this.cadastroAgendamentoBinding = cadastroAgendamentoBinding;
+
     }
 
     @NonNull
@@ -42,7 +64,7 @@ public class AdapterCliente extends RecyclerView.Adapter<AdapterCliente.MyViewHo
         return new MyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_cliente, parent, false));
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint({"NotifyDataSetChanged", "SetTextI18n"})
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         ClienteModel cliente = clientes.get(position);
@@ -63,6 +85,17 @@ public class AdapterCliente extends RecyclerView.Adapter<AdapterCliente.MyViewHo
                 dialogCarregando.dismiss();
             });
         });
+
+        if ( exibicao ){
+            holder.removerBtn.setVisibility(View.GONE);
+            holder.zapBtn.setVisibility(View.GONE);
+            holder.selecionarBtn.setVisibility(View.VISIBLE);
+        }
+
+        holder.selecionarBtn.setOnClickListener(view -> {
+            dialogSelecao.dismiss();
+            cadastroAgendamentoBinding.textClienteSelecionado.setText("Cliente Selecionado:\n" + cliente.getNome() + "\n" + cliente.getId());
+        });
     }
 
     @Override
@@ -72,12 +105,13 @@ public class AdapterCliente extends RecyclerView.Adapter<AdapterCliente.MyViewHo
 
     public static class  MyViewHolder extends RecyclerView.ViewHolder {
         TextView infoCliente;
-        Button removerBtn, zapBtn;
+        Button removerBtn, zapBtn, selecionarBtn;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             infoCliente = itemView.findViewById(R.id.textInfoNameCliente);
             removerBtn = itemView.findViewById(R.id.remove_cliente_btn);
             zapBtn = itemView.findViewById(R.id.chamarNoZap);
+            selecionarBtn = itemView.findViewById(R.id.selecionar_cliente_btn);
         }
     }
 }
