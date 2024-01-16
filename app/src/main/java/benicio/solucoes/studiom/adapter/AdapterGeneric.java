@@ -3,6 +3,7 @@ package benicio.solucoes.studiom.adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
+import benicio.solucoes.studiom.ComissaoActivity;
 import benicio.solucoes.studiom.R;
 import benicio.solucoes.studiom.models.UserModel;
 
@@ -56,6 +58,12 @@ public class AdapterGeneric extends RecyclerView.Adapter<AdapterGeneric.MyViewHo
                 dialogCarregando.dismiss();
             });
         });
+
+        holder.agendamentos.setOnClickListener(view -> {
+            Intent i = new Intent(a, ComissaoActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            a.startActivity(i);
+        });
     }
 
     @Override
@@ -65,11 +73,12 @@ public class AdapterGeneric extends RecyclerView.Adapter<AdapterGeneric.MyViewHo
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView info;
-        Button removerButton;
+        Button removerButton, agendamentos;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             info = itemView.findViewById(R.id.textInfoGeneric);
             removerButton = itemView.findViewById(R.id.remove_item_btn);
+            agendamentos = itemView.findViewById(R.id.agendamentos_comissoes_btn2);
         }
     }
 }

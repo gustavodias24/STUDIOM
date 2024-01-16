@@ -26,4 +26,16 @@
         android:textStyle="bold"
         app:icon="@android:drawable/ic_delete"
         app:iconGravity="textStart" />
+
+    <Button
+        android:id="@+id/agendamentos_comissoes_btn2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#FF9800"
+        android:text="AGENDAMENTOS/COMISSÕES"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        app:icon="@drawable/ic_success"
+        app:iconGravity="textStart" />
+
 </LinearLayout>

@@ -3,8 +3,7 @@ cadastro de funcionario
 nome, email, senha, comissão em %
 cadastro de cliente
 nome, número de whatsapp
-
-
+botão de avisar no zap pra cada sessão
 cadastro de agendamento ( individualmente, des do inicio )
 data e hora, valor, status ( concluido, pendente, remarcado )
 
@@ -12,4 +11,3 @@ data e hora, valor, status ( concluido, pendente, remarcado )
 
 filtro de pedidos por data, mostrar a comissão para cada funcionario
 
-botão de avisar no zap pra cada sessão

@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
 import benicio.solucoes.studiom.databinding.ActivityMainBinding;
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding mainBinding;
     private static final int SPLASH_DURATION = 3000;
+    private FirebaseAuth auth = FirebaseAuth.getInstance();
 
     private SharedPreferences preferences;
     @SuppressLint("ResourceType")
@@ -52,8 +54,7 @@ public class MainActivity extends AppCompatActivity {
                 if( preferences.getBoolean("admin", false)){
                     intent = new Intent(this, MenuAdminActivity.class);
                 }else{
-                    // TO DO AGENDAMENTOS
-                    intent = new Intent(this, LoginActivity.class);
+                    intent = new Intent(this, FuncionarioActivity.class);
                 }
             }
 

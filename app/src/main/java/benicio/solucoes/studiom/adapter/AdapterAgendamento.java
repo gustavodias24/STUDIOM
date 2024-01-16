@@ -36,11 +36,20 @@ public class AdapterAgendamento extends RecyclerView.Adapter<AdapterAgendamento.
     Dialog dialogCarregando;
     Dialog dialogEdicao = null;
 
+    boolean paraFuncionario = false;
+
 
     public AdapterAgendamento(List<AgendamentoModel> agendamentos, Activity a, Dialog dialogCarregando) {
         this.agendamentos = agendamentos;
         this.a = a;
         this.dialogCarregando = dialogCarregando;
+    }
+
+    public AdapterAgendamento(List<AgendamentoModel> agendamentos, Activity a, Dialog dialogCarregando, boolean paraFuncionario) {
+        this.agendamentos = agendamentos;
+        this.a = a;
+        this.dialogCarregando = dialogCarregando;
+        this.paraFuncionario = paraFuncionario;
     }
 
     @NonNull
@@ -52,6 +61,11 @@ public class AdapterAgendamento extends RecyclerView.Adapter<AdapterAgendamento.
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         AgendamentoModel agendamento = agendamentos.get(position);
+
+        if ( paraFuncionario ){
+            holder.realizarAula.setVisibility(View.VISIBLE);
+            holder.remover.setVisibility(View.GONE);
+        }
 
         String textAviso = "?text=Ol%C3%A1%2C+a+sua+aula+est%C3%A1+pr%C3%B3xima+de+come%C3%A7ar%2C+tudo+bem%3F";
 

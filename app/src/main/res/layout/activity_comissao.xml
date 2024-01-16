@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="8dp"
+        tools:context=".ComissaoActivity">
+
+        <TextView
+            android:id="@+id/dasdsasdas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Data Inicial" />
+
+        <com.vicmikhailau.maskededittext.MaskedEditText
+            android:id="@+id/dataInicial"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="dd-MM-yyyy"
+            android:inputType="number|numberDecimal|numberSigned"
+            app:mask="##-##-####" />
+
+        <TextView
+            android:id="@+id/dassdas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Data Final" />
+
+        <com.vicmikhailau.maskededittext.MaskedEditText
+            android:id="@+id/dataFinal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="dd-MM-yyyy"
+            android:inputType="number|numberDecimal|numberSigned"
+            app:mask="##-##-####" />
+
+        <Button
+            android:id="@+id/filtrar_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FF9800"
+            android:text="FILTRAR"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            app:icon="@android:drawable/ic_menu_search"
+            app:iconGravity="textStart" />
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Comissão do Período: R$ 100,00"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/agendamentos"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout></ScrollView>

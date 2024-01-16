@@ -1,8 +1,10 @@
 package benicio.solucoes.studiom.models;
 
 public class AgendamentoModel {
-    String idCliente, nomeCliente, data, hora, pacote, id;
+    String idCliente,nomeCliente, data, hora, pacote, id;
     int status, aula;
+
+    String idProfessor;
 
     @Override
     public String toString() {
@@ -35,6 +37,14 @@ public class AgendamentoModel {
         this.id = id;
         this.status = status;
         this.aula = aula;
+    }
+
+    public String getIdProfessor() {
+        return idProfessor;
+    }
+
+    public void setIdProfessor(String idProfessor) {
+        this.idProfessor = idProfessor;
     }
 
     public AgendamentoModel() {
