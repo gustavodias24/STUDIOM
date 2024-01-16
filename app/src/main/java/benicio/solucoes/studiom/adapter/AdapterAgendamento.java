@@ -1,6 +1,7 @@
 package benicio.solucoes.studiom.adapter;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
@@ -19,7 +20,9 @@ import com.rejowan.cutetoast.CuteToast;
 
 import java.util.List;
 
+import benicio.solucoes.studiom.CadastroActivity;
 import benicio.solucoes.studiom.R;
+import benicio.solucoes.studiom.databinding.LayoutCadastroAgendamentoBinding;
 import benicio.solucoes.studiom.models.AgendamentoModel;
 import benicio.solucoes.studiom.models.ClienteModel;
 
@@ -31,6 +34,8 @@ public class AdapterAgendamento extends RecyclerView.Adapter<AdapterAgendamento.
     Activity a;
 
     Dialog dialogCarregando;
+    Dialog dialogEdicao = null;
+
 
     public AdapterAgendamento(List<AgendamentoModel> agendamentos, Activity a, Dialog dialogCarregando) {
         this.agendamentos = agendamentos;
@@ -73,6 +78,60 @@ public class AdapterAgendamento extends RecyclerView.Adapter<AdapterAgendamento.
         });
 
         holder.infos.setText(agendamento.toString());
+
+
+        holder.editar.setOnClickListener( view -> {
+
+            AlertDialog.Builder b = new AlertDialog.Builder(a);
+            LayoutCadastroAgendamentoBinding cadastroAgendamentoBinding = LayoutCadastroAgendamentoBinding.inflate(a.getLayoutInflater());
+
+            cadastroAgendamentoBinding.selecionarCliente.setVisibility(View.GONE);
+            cadastroAgendamentoBinding.textClienteSelecionado.setVisibility(View.GONE);
+            cadastroAgendamentoBinding.cadastrarAgendamento.setText("ATUALIZAR");
+
+            cadastroAgendamentoBinding.dataAgendamento.setText(agendamento.getData());
+
+            if ( !agendamento.getHora().isEmpty() ){
+
+                String isAm = agendamento.getHora().split(" ")[1];
+                cadastroAgendamentoBinding.horaAgendamento.setText(agendamento.getHora().split(" ")[0]);
+
+                if ( isAm.equals("AM")){
+                    cadastroAgendamentoBinding.radioAM.setChecked(true);
+                }else{
+                    cadastroAgendamentoBinding.radioPM.setChecked(true);
+                }
+            }
+
+            cadastroAgendamentoBinding.radio12.setVisibility(View.GONE);
+            cadastroAgendamentoBinding.radio8.setVisibility(View.GONE);
+            cadastroAgendamentoBinding.textView.setVisibility(View.GONE);
+
+            cadastroAgendamentoBinding.cadastrarAgendamento.setOnClickListener(atualizarView -> {
+                dialogCarregando.show();
+                agendamento.setData(
+                        cadastroAgendamentoBinding.dataAgendamento.getText().toString()
+                );
+
+                agendamento.setHora(
+                        cadastroAgendamentoBinding.horaAgendamento.getText().toString() + " " +
+                        (cadastroAgendamentoBinding.radioAM.isChecked() ? "AM" : "PM")
+                );
+
+                refAgendamentos.child(agendamento.getId()).setValue(agendamento).addOnCompleteListener( task ->{
+                    if ( task.isSuccessful() ){
+                        CuteToast.ct(a, "Atualizado com Sucesso", CuteToast.LENGTH_LONG, CuteToast.SUCCESS, true).show();
+                        dialogEdicao.dismiss();
+                    }
+
+                    dialogCarregando.dismiss();
+                });
+
+            });
+            b.setView(cadastroAgendamentoBinding.getRoot());
+            dialogEdicao = b.create();
+            dialogEdicao.show();
+        });
 
     }
 
