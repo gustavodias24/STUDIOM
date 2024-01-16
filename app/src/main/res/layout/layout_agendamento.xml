@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Dados do Agendamento:" />
+
+    <TextView
+        android:id="@+id/textInfoAgendamento"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textAlignment="viewStart"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/avisarAlunoZap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#54ec68"
+        android:text="Avisar no WhatsApp"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        app:icon="@android:drawable/stat_sys_phone_call"
+        app:iconGravity="textStart" />
+
+    <Button
+        android:id="@+id/remove_agendamento_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#FF0000"
+        android:text="REMOVER"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        app:icon="@android:drawable/ic_delete"
+        app:iconGravity="textStart" />
+
+
+    <Button
+        android:id="@+id/editar_agendamento_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#FF9800"
+        android:text="EDITAR DATA"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        app:icon="@android:drawable/ic_menu_edit"
+        app:iconGravity="textStart" />
+
+    <Button
+        android:id="@+id/selecionar_agendamento_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#FF9800"
+        android:text="REALIZAR ESSA AULA"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:icon="@drawable/ic_success"
+        app:iconGravity="textStart" />
+</LinearLayout>

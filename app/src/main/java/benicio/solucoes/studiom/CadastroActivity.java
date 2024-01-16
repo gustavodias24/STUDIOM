@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import benicio.solucoes.studiom.adapter.AdapterAgendamento;
 import benicio.solucoes.studiom.adapter.AdapterCliente;
 import benicio.solucoes.studiom.adapter.AdapterGeneric;
 import benicio.solucoes.studiom.databinding.ActivityCadastroBinding;
@@ -50,6 +51,9 @@ public class CadastroActivity extends AppCompatActivity {
     private RecyclerView recyclerCadastro;
     private AdapterGeneric adapterGeneric;
     private AdapterCliente adapterCliente;
+
+    private List<AgendamentoModel> agendamentos = new ArrayList<>();
+    private AdapterAgendamento adapterAgendamento;
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private DatabaseReference refUser = FirebaseDatabase.getInstance().getReference().child("users");
     private DatabaseReference refClientes = FirebaseDatabase.getInstance().getReference().child("clientes");
@@ -93,6 +97,8 @@ public class CadastroActivity extends AppCompatActivity {
                 break;
             default:
                 configurarDialogCadastroAgendamento();
+                configurarRecyclerAgendamento();
+                configurarListenerAgendamento();
 
         }
 
@@ -133,12 +139,10 @@ public class CadastroActivity extends AppCompatActivity {
         b.setView(cadastroClienteBinding.getRoot());
         dialogCadastro = b.create();
     }
-
     private void configurarRecyclerCliente(){
         adapterCliente = new AdapterCliente(clientes,this, dialogCarregando);
         recyclerCadastro.setAdapter(adapterCliente);
     }
-
     private void configurarListenerCliente(){
         dialogCarregando.show();
 
@@ -368,6 +372,35 @@ public class CadastroActivity extends AppCompatActivity {
 
         b.setView(cadastroAgendamentoBinding.getRoot());
         dialogCadastro = b.create();
+    }
+
+    private void configurarRecyclerAgendamento(){
+        adapterAgendamento = new AdapterAgendamento(agendamentos,this, dialogCarregando);
+        recyclerCadastro.setAdapter(adapterAgendamento);
+    }
+
+    private void configurarListenerAgendamento(){
+        dialogCarregando.show();
+        refAgendamentos.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                agendamentos.clear();
+                dialogCarregando.dismiss();
+                if ( snapshot.exists() ){
+                    for ( DataSnapshot dado : snapshot.getChildren() ){
+                        AgendamentoModel agendamento = dado.getValue(AgendamentoModel.class);
+                        agendamentos.add(agendamento);
+                    }
+                    adapterAgendamento.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                dialogCarregando.dismiss();
+            }
+        });
     }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

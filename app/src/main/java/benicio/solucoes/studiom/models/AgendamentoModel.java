@@ -4,6 +4,28 @@ public class AgendamentoModel {
     String idCliente, nomeCliente, data, hora, pacote, id;
     int status, aula;
 
+    @Override
+    public String toString() {
+
+        String statusTexto = "";
+
+        if ( status == 0){
+            statusTexto = "Pendente - Aguardando Professor";
+        }else if ( status == 1){
+            statusTexto = "Cancelado!";
+        }else{
+            statusTexto = "Concluída!";
+        }
+
+        return  "Aula ("+aula+")" +
+                "\nstatus: " + statusTexto +
+                "\nNome do Cliente: " + nomeCliente + '\n' +
+                "Data: " + data + '\n' +
+                "Hora: " + hora + '\n' +
+                "Pacote: " + pacote + '\n';
+
+    }
+
     public AgendamentoModel(String idCliente, String nomeCliente, String data, String hora, String pacote, String id, int status, int aula) {
         this.idCliente = idCliente;
         this.nomeCliente = nomeCliente;
