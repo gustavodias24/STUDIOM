@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.rejowan.cutetoast.CuteToast;
 
 import java.util.List;
 
@@ -60,6 +61,14 @@ public class AdapterAgendamento extends RecyclerView.Adapter<AdapterAgendamento.
                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                    a.startActivity(i);
                }
+            });
+        });
+
+        holder.remover.setOnClickListener(view -> {
+            dialogCarregando.show();
+            refAgendamentos.child(agendamento.getId()).setValue(null).addOnCompleteListener(task -> {
+                dialogCarregando.dismiss();
+                CuteToast.ct(a, "Aula Removida", CuteToast.LENGTH_LONG, CuteToast.SUCCESS, true).show();
             });
         });
 
