@@ -1,5 +1,6 @@
 package benicio.solucoes.studiom.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -38,6 +39,8 @@ public class AdapterAgendamento extends RecyclerView.Adapter<AdapterAgendamento.
 
     boolean paraFuncionario = false;
 
+    String idFuncionario;
+
 
     public AdapterAgendamento(List<AgendamentoModel> agendamentos, Activity a, Dialog dialogCarregando) {
         this.agendamentos = agendamentos;
@@ -45,11 +48,16 @@ public class AdapterAgendamento extends RecyclerView.Adapter<AdapterAgendamento.
         this.dialogCarregando = dialogCarregando;
     }
 
-    public AdapterAgendamento(List<AgendamentoModel> agendamentos, Activity a, Dialog dialogCarregando, boolean paraFuncionario) {
+    public AdapterAgendamento(List<AgendamentoModel> agendamentos,
+                              Activity a,
+                              Dialog dialogCarregando,
+                              boolean paraFuncionario,
+                              String idFuncionario) {
         this.agendamentos = agendamentos;
         this.a = a;
         this.dialogCarregando = dialogCarregando;
         this.paraFuncionario = paraFuncionario;
+        this.idFuncionario = idFuncionario;
     }
 
     @NonNull
@@ -58,14 +66,97 @@ public class AdapterAgendamento extends RecyclerView.Adapter<AdapterAgendamento.
         return new MyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_agendamento, parent, false));
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         AgendamentoModel agendamento = agendamentos.get(position);
 
-        if ( paraFuncionario ){
+        if (agendamento.getStatus() == 0){
+            holder.chamarNoZap.setVisibility(View.VISIBLE);
+            holder.editar.setVisibility(View.VISIBLE);
             holder.realizarAula.setVisibility(View.VISIBLE);
+
+            holder.concluir.setVisibility(View.GONE);
+            holder.desmarcar.setVisibility(View.GONE);
+        }else if ( agendamento.getStatus() == 1){
+            holder.chamarNoZap.setVisibility(View.VISIBLE);
+            holder.editar.setVisibility(View.VISIBLE);
+            holder.concluir.setVisibility(View.VISIBLE);
+            holder.desmarcar.setVisibility(View.VISIBLE);
+
+            holder.realizarAula.setVisibility(View.GONE);
+        }else if ( agendamento.getStatus() == 2){
+            holder.chamarNoZap.setVisibility(View.VISIBLE);
+            holder.editar.setVisibility(View.VISIBLE);
+
+            holder.concluir.setVisibility(View.GONE);
+            holder.desmarcar.setVisibility(View.GONE);
+            holder.realizarAula.setVisibility(View.GONE);
+        }
+
+        if ( !paraFuncionario ){
+            holder.chamarNoZap.setVisibility(View.VISIBLE);
+            holder.editar.setVisibility(View.VISIBLE);
+            holder.remover.setVisibility(View.VISIBLE);
+
+            holder.concluir.setVisibility(View.GONE);
+            holder.desmarcar.setVisibility(View.GONE);
+            holder.realizarAula.setVisibility(View.GONE);
+        }else{
             holder.remover.setVisibility(View.GONE);
         }
+
+        if ( agendamento.getStatus() == 1){
+            if (agendamento.getIdProfessor().equals(idFuncionario)){
+                holder.desmarcar.setOnClickListener(view -> {
+                    agendamento.setStatus(0);
+                    agendamento.setIdProfessor("");
+                    dialogCarregando.show();
+
+                    refAgendamentos.child(agendamento.getId()).setValue(agendamento).addOnCompleteListener(
+                            task -> {
+                                dialogCarregando.dismiss();
+                                if ( task.isSuccessful() ){
+                                    this.notifyDataSetChanged();
+                                    CuteToast.ct(a, "Aula Desmarcada", CuteToast.LENGTH_LONG, CuteToast.SUCCESS, true).show();
+                                }
+                            }
+                    );
+                });
+
+                holder.concluir.setOnClickListener(view -> {
+                    agendamento.setStatus(2);
+                    dialogCarregando.show();
+                    refAgendamentos.child(agendamento.getId()).setValue(agendamento).addOnCompleteListener(
+                            task -> {
+                                dialogCarregando.dismiss();
+                                if ( task.isSuccessful() ){
+                                    CuteToast.ct(a, "Aula Concluída", CuteToast.LENGTH_LONG, CuteToast.SUCCESS, true).show();
+                                }
+                            }
+                    );
+                });
+            }else{
+                holder.desmarcar.setVisibility(View.GONE);
+                holder.concluir.setVisibility(View.GONE);
+            }
+        }
+
+
+
+        holder.realizarAula.setOnClickListener( view -> {
+            dialogCarregando.show();
+            agendamento.setIdProfessor(idFuncionario);
+            agendamento.setStatus(1);
+            refAgendamentos.child(agendamento.getId()).setValue(agendamento).addOnCompleteListener(
+                    task -> {
+                        dialogCarregando.dismiss();
+                        if ( task.isSuccessful() ){
+                            CuteToast.ct(a, "Aula Agendada com Você", CuteToast.LENGTH_LONG, CuteToast.SUCCESS, true).show();
+                        }
+                    }
+            );
+        });
 
         String textAviso = "?text=Ol%C3%A1%2C+a+sua+aula+est%C3%A1+pr%C3%B3xima+de+come%C3%A7ar%2C+tudo+bem%3F";
 
@@ -88,6 +179,7 @@ public class AdapterAgendamento extends RecyclerView.Adapter<AdapterAgendamento.
             refAgendamentos.child(agendamento.getId()).setValue(null).addOnCompleteListener(task -> {
                 dialogCarregando.dismiss();
                 CuteToast.ct(a, "Aula Removida", CuteToast.LENGTH_LONG, CuteToast.SUCCESS, true).show();
+                this.notifyDataSetChanged();
             });
         });
 
@@ -156,7 +248,7 @@ public class AdapterAgendamento extends RecyclerView.Adapter<AdapterAgendamento.
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        Button chamarNoZap, remover, editar, realizarAula;
+        Button chamarNoZap, remover, editar, realizarAula, concluir, desmarcar;
         TextView infos;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -165,6 +257,9 @@ public class AdapterAgendamento extends RecyclerView.Adapter<AdapterAgendamento.
             editar = itemView.findViewById(R.id.editar_agendamento_btn);
             realizarAula = itemView.findViewById(R.id.selecionar_agendamento_btn);
             infos = itemView.findViewById(R.id.textInfoAgendamento);
+            concluir = itemView.findViewById(R.id.concluir_agendamento_btn);
+            desmarcar = itemView.findViewById(R.id.desmarcar_agendamento_btn);
+
         }
     }
 }

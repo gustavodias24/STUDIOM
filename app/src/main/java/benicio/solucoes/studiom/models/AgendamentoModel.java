@@ -14,8 +14,8 @@ public class AgendamentoModel {
         if ( status == 0){
             statusTexto = "Pendente - Aguardando Professor";
         }else if ( status == 1){
-            statusTexto = "Cancelado!";
-        }else{
+            statusTexto = "Em Andamento!";
+        }else if ( status == 2){
             statusTexto = "Concluída!";
         }
 

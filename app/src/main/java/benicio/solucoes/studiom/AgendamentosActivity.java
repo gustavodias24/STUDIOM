@@ -36,12 +36,19 @@ public class AgendamentosActivity extends AppCompatActivity {
     private AdapterAgendamento adapterAgendamento;
     private List<AgendamentoModel> agendamentos = new ArrayList<>();
     private Dialog dialogCarregando;
+    private Bundle b;
+    private int t;
+    private String idFuncionario;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mainBinding = ActivityAgendamentosBinding.inflate(getLayoutInflater());
         setContentView(mainBinding.getRoot());
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+        b = getIntent().getExtras();
+        idFuncionario = b.getString("idFuncionario", "");
+        t = b.getInt("t", 0);
 
         getSupportActionBar().setTitle("Agendamentos");
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -58,7 +65,7 @@ public class AgendamentosActivity extends AppCompatActivity {
         recyclerAgendamento.setLayoutManager(new LinearLayoutManager(this));
         recyclerAgendamento.setHasFixedSize(true);
         recyclerAgendamento.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        adapterAgendamento = new AdapterAgendamento(agendamentos,this, dialogCarregando, true);
+        adapterAgendamento = new AdapterAgendamento(agendamentos,this, dialogCarregando, true, idFuncionario);
         recyclerAgendamento.setAdapter(adapterAgendamento);
     }
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -85,7 +92,19 @@ public class AgendamentosActivity extends AppCompatActivity {
                 if ( snapshot.exists() ){
                     for ( DataSnapshot dado : snapshot.getChildren() ){
                         AgendamentoModel agendamento = dado.getValue(AgendamentoModel.class);
-                        agendamentos.add(agendamento);
+
+                        if (t == 0) {
+                            if ( agendamento.getStatus() == 0){
+                                agendamentos.add(agendamento);
+                            }
+                        }else{
+                            if ( agendamento.getStatus() != 0){
+                                if ( agendamento.getIdProfessor().equals(idFuncionario)){
+                                    agendamentos.add(agendamento);
+                                }
+                            }
+                        }
+
                     }
                     adapterAgendamento.notifyDataSetChanged();
                 }
