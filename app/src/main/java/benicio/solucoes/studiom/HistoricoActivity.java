@@ -11,6 +11,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.firebase.database.DataSnapshot;
@@ -59,7 +60,6 @@ public class HistoricoActivity extends AppCompatActivity {
 
         b = getIntent().getExtras();
         idCliente = b.getString("idCliente", "");
-
 
         configurarDialogCarregando();
         configurarRecyclerAgendamento();
@@ -112,7 +112,7 @@ public class HistoricoActivity extends AppCompatActivity {
                 if ( snapshot.exists() ){
                     for ( DataSnapshot dado : snapshot.getChildren() ){
                         AgendamentoModel agendamento = dado.getValue(AgendamentoModel.class);
-                        if ( agendamento.getStatus() != 0 && agendamento.getIdCliente().equals(idCliente)){
+                        if ( agendamento.getIdCliente().equals(idCliente)){
                             if ( dataFinal == null && dataInicial == null){
                                 agendamentos.add(agendamento);
                             }else{
