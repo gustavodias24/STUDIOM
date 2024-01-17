@@ -45,6 +45,18 @@
         app:iconGravity="textStart" />
 
     <Button
+        android:id="@+id/historico_cliente_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#FF9800"
+        android:text="HITÓRICO"
+        android:textAllCaps="true"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        app:icon="@drawable/ic_save"
+        app:iconGravity="textStart" />
+
+    <Button
         android:id="@+id/selecionar_cliente_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

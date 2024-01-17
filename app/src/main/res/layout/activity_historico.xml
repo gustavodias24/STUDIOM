@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="8dp"
-        tools:context=".ComissaoActivity">
+        tools:context=".HistoricoActivity">
 
         <TextView
             android:id="@+id/dasdsasdas"
@@ -53,15 +53,6 @@
             android:textStyle="bold"
             app:icon="@android:drawable/ic_menu_search"
             app:iconGravity="textStart" />
-
-        <TextView
-            android:id="@+id/comissaoText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Comissão do Período: R$ 100,00"
-            android:textColor="#000000"
-            android:textSize="20sp"
-            android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerAgendamentos"

@@ -61,6 +61,8 @@ public class AdapterGeneric extends RecyclerView.Adapter<AdapterGeneric.MyViewHo
 
         holder.agendamentos.setOnClickListener(view -> {
             Intent i = new Intent(a, ComissaoActivity.class);
+            i.putExtra("comissao", funcionario.getComissao());
+            i.putExtra("idFuncionario", funcionario.getId());
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             a.startActivity(i);
         });

@@ -19,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
+import benicio.solucoes.studiom.HistoricoActivity;
 import benicio.solucoes.studiom.R;
 import benicio.solucoes.studiom.databinding.LayoutCadastroAgendamentoBinding;
 import benicio.solucoes.studiom.models.ClienteModel;
@@ -89,9 +90,16 @@ public class AdapterCliente extends RecyclerView.Adapter<AdapterCliente.MyViewHo
         if ( exibicao ){
             holder.removerBtn.setVisibility(View.GONE);
             holder.zapBtn.setVisibility(View.GONE);
+            holder.historico.setVisibility(View.GONE);
             holder.selecionarBtn.setVisibility(View.VISIBLE);
         }
 
+        holder.historico.setOnClickListener( view -> {
+            Intent i = new Intent(a, HistoricoActivity.class);
+            i.putExtra("idCliente", cliente.getId());
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            a.startActivity(i);
+        });
         holder.selecionarBtn.setOnClickListener(view -> {
             dialogSelecao.dismiss();
             cadastroAgendamentoBinding.textClienteSelecionado.setText("Cliente Selecionado:\n" + cliente.getNome() + "\n" + cliente.getId());
@@ -105,13 +113,14 @@ public class AdapterCliente extends RecyclerView.Adapter<AdapterCliente.MyViewHo
 
     public static class  MyViewHolder extends RecyclerView.ViewHolder {
         TextView infoCliente;
-        Button removerBtn, zapBtn, selecionarBtn;
+        Button removerBtn, zapBtn, selecionarBtn, historico;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             infoCliente = itemView.findViewById(R.id.textInfoNameCliente);
             removerBtn = itemView.findViewById(R.id.remove_cliente_btn);
             zapBtn = itemView.findViewById(R.id.chamarNoZap);
             selecionarBtn = itemView.findViewById(R.id.selecionar_cliente_btn);
+            historico = itemView.findViewById(R.id.historico_cliente_btn);
         }
     }
 }
